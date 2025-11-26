@@ -1,0 +1,97 @@
+[
+  {
+    "sender": {
+      "name": "Ahmed Benali",
+      "phone": "+212612345678",
+      "address": "123 Rue Mohammed V",
+      "city": "Casablanca"
+    },
+    "recipient": {
+      "name": "Fatima Zahra",
+      "phone": "+212698765432",
+      "address": "45 Avenue Hassan II",
+      "city": "Rabat"
+    },
+    "package": {
+      "weight": 2.5,
+      "type": "standard",
+      "urgency": "normal"
+    }
+  },
+  {
+    "sender": {
+      "name": "Youssef Alami",
+      "phone": "+212623456789",
+      "address": "78 Boulevard Zerktouni",
+      "city": "Marrakech"
+    },
+    "recipient": {
+      "name": "Samira Idrissi",
+      "phone": "+212687654321",
+      "address": "12 Rue des Mérinides",
+      "city": "Fès"
+    },
+    "package": {
+      "weight": 5.0,
+      "type": "fragile",
+      "urgency": "high"
+    }
+  },
+  {
+    "sender": {
+      "name": "Karim Tazi",
+      "phone": "+212634567890",
+      "address": "90 Avenue de la Liberté",
+      "city": "Tanger"
+    },
+    "recipient": {
+      "name": "Nadia Benjelloun",
+      "phone": "+212676543210",
+      "address": "34 Rue Ibn Khaldoun",
+      "city": "Casablanca"
+    },
+    "package": {
+      "weight": 1.2,
+      "type": "medical",
+      "urgency": "express"
+    }
+  },
+  {
+    "sender": {
+      "name": "Omar Fassi",
+      "phone": "+212645678901",
+      "address": "56 Rue Allal Ben Abdellah",
+      "city": "Rabat"
+    },
+    "recipient": {
+      "name": "Laila Chraibi",
+      "phone": "+212665432109",
+      "address": "23 Avenue Mohammed VI",
+      "city": "Agadir"
+    },
+    "package": {
+      "weight": 3.8,
+      "type": "refrigerated",
+      "urgency": "high"
+    }
+  },
+  {
+    "sender": {
+      "name": "Hassan Berrada",
+      "phone": "+212656789012",
+      "address": "67 Boulevard Anfa",
+      "city": "Casablanca"
+    },
+    "recipient": {
+      "name": "Zineb Amrani",
+      "phone": "+212654321098",
+      "address": "89 Rue de la Kasbah",
+      "city": "Marrakech"
+    },
+    "package": {
+      "weight": 4.5,
+      "type": "standard",
+      "urgency": "normal"
+    }
+  }
+]
