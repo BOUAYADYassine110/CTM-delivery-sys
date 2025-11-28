@@ -6,6 +6,8 @@ from utils.websocket import init_socketio
 from routes.orders import orders_bp
 from routes.agents import agents_bp
 from routes.tracking import tracking_bp
+from routes.auth import auth_bp
+from routes.admin import admin_bp
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = Config.SECRET_KEY
@@ -20,6 +22,8 @@ init_db()
 socketio = init_socketio(app)
 
 # Register blueprints
+app.register_blueprint(auth_bp, url_prefix='/api')
+app.register_blueprint(admin_bp, url_prefix='/api')
 app.register_blueprint(orders_bp, url_prefix='/api')
 app.register_blueprint(agents_bp, url_prefix='/api')
 app.register_blueprint(tracking_bp, url_prefix='/api')

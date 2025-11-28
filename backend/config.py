@@ -10,3 +10,7 @@ class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
     OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', '')
     CORS_ORIGINS = os.getenv('CORS_ORIGINS', 'http://localhost:5173').split(',')
+    
+    # External APIs
+    OPENROUTE_API_KEY = os.getenv('OPENROUTE_API_KEY', '')
+    WEATHER_API_KEY = os.getenv('WEATHER_API_KEY', '')  # OpenWeatherMap

@@ -5,6 +5,7 @@ import { Search, Loader } from 'lucide-react';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import TrackingCard from '../components/TrackingCard';
+import DeliveryInsights from '../components/DeliveryInsights';
 import { useOrders } from '../hooks/useOrders';
 import { useWebSocket } from '../hooks/useWebSocket';
 
@@ -83,6 +84,12 @@ export default function Track() {
               animate={{ opacity: 1, y: 0 }}
             >
               <TrackingCard order={order} />
+              
+              {order.delivery_insights && (
+                <div className="mt-6">
+                  <DeliveryInsights insights={order.delivery_insights} />
+                </div>
+              )}
               
               {order.assigned_agent && (
                 <div className="mt-6 bg-white rounded-lg shadow-sm p-6">

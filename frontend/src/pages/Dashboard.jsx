@@ -1,16 +1,27 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { Package, Truck, Users, TrendingUp } from 'lucide-react';
 import Card from '../components/ui/Card';
 import AgentStatus from '../components/AgentStatus';
 import { useOrders } from '../hooks/useOrders';
+import { useAuth } from '../contexts/AuthContext';
 import apiClient from '../api/client';
 import { statusColors, formatDate } from '../utils/helpers';
 import { cn } from '../utils/helpers';
 
 export default function Dashboard() {
+  const { user, isAdmin, isEmployee } = useAuth();
+  const navigate = useNavigate();
   const { orders, loading } = useOrders();
   const [agents, setAgents] = useState([]);
+
+  useEffect(() => {
+    if (!isAdmin() && !isEmployee()) {
+      navigate('/');
+      return;
+    }
+  }, [user]);
 
   useEffect(() => {
     fetchAgents();

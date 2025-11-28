@@ -64,7 +64,9 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # Configurer les variables d'environnement
-# Copier .env.example vers .env et modifier les valeurs
+# Modifier .env avec vos clés API:
+# - OPENROUTE_API_KEY: https://openrouteservice.org/dev/#/signup
+# - WEATHER_API_KEY: https://openweathermap.org/api
 ```
 
 ### 3. Configuration Frontend
