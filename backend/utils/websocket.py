@@ -4,7 +4,15 @@ socketio = None
 
 def init_socketio(app):
     global socketio
-    socketio = SocketIO(app, cors_allowed_origins="*")
+    socketio = SocketIO(
+        app, 
+        cors_allowed_origins="*",
+        async_mode='threading',
+        logger=True,
+        engineio_logger=True,
+        ping_timeout=60,
+        ping_interval=25
+    )
     
     @socketio.on('subscribe_order')
     def handle_subscribe(data):

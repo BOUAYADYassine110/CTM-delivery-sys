@@ -3,15 +3,25 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, Check, Loader } from 'lucide-react';
 import Input from './ui/Input';
 import Button from './ui/Button';
+import AddressPicker from './AddressPicker';
+import InCityRoutePreview from './InCityRoutePreview';
 import { moroccanCities } from '../utils/helpers';
 
-export default function OrderForm({ onSubmit, loading }) {
+export default function OrderForm({ onSubmit, loading, initialData }) {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    sender: { name: '', phone: '', address: '', city: '' },
-    recipient: { name: '', phone: '', address: '', city: '' },
-    package: { weight: 1, type: 'standard', urgency: 'normal' },
-  });
+  const [formData, setFormData] = useState(
+    initialData || {
+      sender: { name: '', phone: '', address: '', city: '', coordinates: null },
+      recipient: { name: '', phone: '', address: '', city: '', coordinates: null },
+      package: { weight: 1, type: 'standard', urgency: 'normal' },
+      delivery_option: 'standard'
+    }
+  );
+  
+  const isInCity = formData.sender.city && formData.recipient.city && formData.sender.city === formData.recipient.city;
+  
+  const [senderCoords, setSenderCoords] = useState(null);
+  const [recipientCoords, setRecipientCoords] = useState(null);
 
   const updateField = (section, field, value) => {
     setFormData(prev => ({
@@ -25,7 +35,13 @@ export default function OrderForm({ onSubmit, loading }) {
     if (step < 4) {
       setStep(step + 1);
     } else {
-      onSubmit(formData);
+      // Add coordinates to form data
+      const finalData = {
+        ...formData,
+        sender: { ...formData.sender, coordinates: senderCoords },
+        recipient: { ...formData.recipient, coordinates: recipientCoords }
+      };
+      onSubmit(finalData);
     }
   };
 
@@ -91,12 +107,6 @@ export default function OrderForm({ onSubmit, loading }) {
                 onChange={(e) => updateField('sender', 'phone', e.target.value)}
                 required
               />
-              <Input
-                label="Adresse"
-                value={formData.sender.address}
-                onChange={(e) => updateField('sender', 'address', e.target.value)}
-                required
-              />
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Ville
@@ -113,6 +123,27 @@ export default function OrderForm({ onSubmit, loading }) {
                   ))}
                 </select>
               </div>
+              <Input
+                label="Adresse"
+                value={formData.sender.address}
+                onChange={(e) => updateField('sender', 'address', e.target.value)}
+                required
+              />
+              
+              {formData.sender.address && formData.sender.city && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Localisation exacte (cliquez sur la carte)
+                  </label>
+                  <AddressPicker 
+                    city={formData.sender.city}
+                    onLocationSelect={(coords, address) => {
+                      setSenderCoords(coords);
+                      updateField('sender', 'address', address);
+                    }}
+                  />
+                </div>
+              )}
             </motion.div>
           )}
 
@@ -138,12 +169,6 @@ export default function OrderForm({ onSubmit, loading }) {
                 onChange={(e) => updateField('recipient', 'phone', e.target.value)}
                 required
               />
-              <Input
-                label="Adresse"
-                value={formData.recipient.address}
-                onChange={(e) => updateField('recipient', 'address', e.target.value)}
-                required
-              />
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Ville
@@ -160,6 +185,27 @@ export default function OrderForm({ onSubmit, loading }) {
                   ))}
                 </select>
               </div>
+              <Input
+                label="Adresse"
+                value={formData.recipient.address}
+                onChange={(e) => updateField('recipient', 'address', e.target.value)}
+                required
+              />
+              
+              {formData.recipient.address && formData.recipient.city && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Localisation exacte (cliquez sur la carte)
+                  </label>
+                  <AddressPicker 
+                    city={formData.recipient.city}
+                    onLocationSelect={(coords, address) => {
+                      setRecipientCoords(coords);
+                      updateField('recipient', 'address', address);
+                    }}
+                  />
+                </div>
+              )}
             </motion.div>
           )}
 
@@ -201,27 +247,60 @@ export default function OrderForm({ onSubmit, loading }) {
                   <option value="medical">Médical</option>
                 </select>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Urgence
-                </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {['normal', 'high', 'express'].map(urgency => (
-                    <button
-                      key={urgency}
-                      type="button"
-                      onClick={() => updateField('package', 'urgency', urgency)}
-                      className={`px-4 py-2 rounded-lg font-medium transition ${
-                        formData.package.urgency === urgency
-                          ? 'bg-primary-500 text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      {urgency === 'normal' ? 'Normal' : urgency === 'high' ? 'Urgent' : 'Express'}
-                    </button>
-                  ))}
+              {!isInCity && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Option de livraison inter-ville
+                  </label>
+                  <div className="space-y-2">
+                    {[
+                      { value: 'economy', label: 'Économique', desc: '5-7 jours', price: 'Moins cher' },
+                      { value: 'standard', label: 'Standard', desc: '3-4 jours', price: 'Prix normal' },
+                      { value: 'express', label: 'Express', desc: '1-2 jours', price: 'Plus rapide' }
+                    ].map(option => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, delivery_option: option.value })}
+                        className={`w-full p-3 rounded-lg border-2 text-left transition ${
+                          formData.delivery_option === option.value
+                            ? 'border-primary-500 bg-primary-50'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <p className="font-semibold">{option.label}</p>
+                            <p className="text-xs text-gray-600">{option.desc}</p>
+                          </div>
+                          <span className="text-xs text-gray-500">{option.price}</span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
+              
+              {isInCity && (
+                <div>
+                  <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg mb-4">
+                    <p className="text-sm text-blue-800">
+                      🚀 <strong>Livraison Express Intra-ville</strong> - Livraison rapide dans la même ville (1-3 heures)
+                    </p>
+                  </div>
+                  
+                  {senderCoords && recipientCoords && (
+                    <div>
+                      <h3 className="text-sm font-semibold text-gray-900 mb-2">Aperçu de l'itinéraire</h3>
+                      <InCityRoutePreview 
+                        senderCoords={senderCoords}
+                        recipientCoords={recipientCoords}
+                        city={formData.sender.city}
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
             </motion.div>
           )}
 

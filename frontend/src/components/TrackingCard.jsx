@@ -71,6 +71,19 @@ export default function TrackingCard({ order }) {
             <p className="text-xs text-gray-600">{order.recipient?.city}</p>
           </div>
         </div>
+        
+        {(order.route_distance_km || order.route_duration_minutes) && (
+          <div className="border-t pt-4 grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-xs text-gray-500">Distance</p>
+              <p className="text-sm font-medium">{order.route_distance_km} km</p>
+            </div>
+            <div>
+              <p className="text-xs text-gray-500">Durée estimée</p>
+              <p className="text-sm font-medium">{order.route_duration_minutes} min</p>
+            </div>
+          </div>
+        )}
       </div>
     </Card>
   );

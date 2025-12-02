@@ -9,26 +9,34 @@ import NewOrder from './pages/NewOrder';
 import Track from './pages/Track';
 import Dashboard from './pages/Dashboard';
 import AdminPanel from './pages/AdminPanel';
+import MyOrders from './pages/MyOrders';
+import DriversManagement from './pages/DriversManagement';
+import RouteTest from './pages/RouteTest';
+import AdminLayout from './components/AdminLayout';
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <div className="min-h-screen bg-gray-50">
-          <Navbar />
-          <AnimatePresence mode="wait">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/new-order" element={<NewOrder />} />
-              <Route path="/track" element={<Track />} />
-              <Route path="/track/:trackingNumber" element={<Track />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/admin" element={<AdminPanel />} />
-            </Routes>
-          </AnimatePresence>
-        </div>
+        <AnimatePresence mode="wait">
+          <Routes>
+            {/* Public routes with Navbar */}
+            <Route path="/" element={<><Navbar /><Home /></>} />
+            <Route path="/login" element={<><Navbar /><Login /></>} />
+            <Route path="/register" element={<><Navbar /><Register /></>} />
+            <Route path="/new-order" element={<><Navbar /><NewOrder /></>} />
+            <Route path="/track" element={<><Navbar /><Track /></>} />
+            <Route path="/track/:trackingNumber" element={<><Navbar /><Track /></>} />
+            <Route path="/my-orders" element={<><Navbar /><MyOrders /></>} />
+            
+            {/* Admin routes with Sidebar */}
+            <Route path="/dashboard" element={<AdminLayout><Dashboard /></AdminLayout>} />
+            <Route path="/orders" element={<AdminLayout><Dashboard /></AdminLayout>} />
+            <Route path="/admin/users" element={<AdminLayout><AdminPanel /></AdminLayout>} />
+            <Route path="/drivers" element={<AdminLayout><DriversManagement /></AdminLayout>} />
+            <Route path="/route-test" element={<AdminLayout><RouteTest /></AdminLayout>} />
+          </Routes>
+        </AnimatePresence>
       </AuthProvider>
     </BrowserRouter>
   );

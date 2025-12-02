@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Package, Home, PlusCircle, Search, LayoutDashboard, LogIn, LogOut, User } from 'lucide-react';
+import { Package, Home, PlusCircle, Search, LayoutDashboard, LogIn, LogOut, User, List } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -48,6 +48,14 @@ export default function Navbar() {
             
             {isAuthenticated ? (
               <>
+                <Link
+                  to="/my-orders"
+                  className="flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary-500 hover:bg-gray-50 transition"
+                >
+                  <List className="h-4 w-4" />
+                  <span>Mes Commandes</span>
+                </Link>
+                
                 {(isAdmin() || isEmployee()) && (
                   <Link
                     to="/dashboard"
@@ -58,15 +66,6 @@ export default function Navbar() {
                   </Link>
                 )}
                 
-                {isAdmin() && (
-                  <Link
-                    to="/admin"
-                    className="flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary-500 hover:bg-gray-50 transition"
-                  >
-                    <User className="h-4 w-4" />
-                    <span>Admin</span>
-                  </Link>
-                )}
                 
                 <div className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-700">
                   <User className="h-4 w-4" />

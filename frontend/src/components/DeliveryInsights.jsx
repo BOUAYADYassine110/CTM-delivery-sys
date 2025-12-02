@@ -2,8 +2,27 @@ import { motion } from 'framer-motion';
 import { Cloud, Navigation, AlertTriangle, Truck, Clock } from 'lucide-react';
 import Card from './ui/Card';
 
-export default function DeliveryInsights({ insights }) {
+export default function DeliveryInsights({ insights, order }) {
   if (!insights) return null;
+  
+  // Check if this is an in-city order with coordinates
+  const hasCoordinates = order?.sender?.coordinates && order?.recipient?.coordinates;
+  const isInCity = order?.delivery_type === 'in_city';
+  
+  // Use order's saved route data if available, otherwise fall back to insights
+  const distance = order?.route_distance_km || insights.route?.distance_km;
+  const duration = order?.route_duration_minutes || insights.estimated_delivery_minutes;
+  
+  console.log('DeliveryInsights data:', { 
+    hasCoordinates,
+    isInCity,
+    order_distance: order?.route_distance_km, 
+    order_duration: order?.route_duration_minutes,
+    insights_distance: insights.route?.distance_km,
+    insights_duration: insights.estimated_delivery_minutes,
+    final_distance: distance,
+    final_duration: duration
+  });
 
   return (
     <Card>
@@ -23,10 +42,10 @@ export default function DeliveryInsights({ insights }) {
             <h4 className="font-semibold text-blue-900">Itinéraire</h4>
           </div>
           <p className="text-sm text-blue-800">
-            Distance: <span className="font-bold">{insights.route?.distance_km} km</span>
+            Distance: <span className="font-bold">{distance > 0 ? `${distance.toFixed(2)} km` : (isInCity && hasCoordinates ? 'Calcul en cours...' : 'Non disponible')}</span>
           </p>
           <p className="text-sm text-blue-800">
-            Durée estimée: <span className="font-bold">{insights.estimated_delivery_minutes} min</span>
+            Durée estimée: <span className="font-bold">{duration > 0 ? `${Math.round(duration)} min` : (isInCity && hasCoordinates ? 'Calcul en cours...' : 'Non disponible')}</span>
           </p>
         </motion.div>
 

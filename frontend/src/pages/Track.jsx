@@ -6,6 +6,7 @@ import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import TrackingCard from '../components/TrackingCard';
 import DeliveryInsights from '../components/DeliveryInsights';
+import RouteMap from '../components/RouteMap';
 import { useOrders } from '../hooks/useOrders';
 import { useWebSocket } from '../hooks/useWebSocket';
 
@@ -87,7 +88,7 @@ export default function Track() {
               
               {order.delivery_insights && (
                 <div className="mt-6">
-                  <DeliveryInsights insights={order.delivery_insights} />
+                  <DeliveryInsights insights={order.delivery_insights} order={order} />
                 </div>
               )}
               
@@ -107,6 +108,15 @@ export default function Track() {
                       <p className="text-sm text-gray-500">En charge de votre livraison</p>
                     </div>
                   </div>
+                </div>
+              )}
+              
+              {order.sender && order.recipient && (
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Carte de l'itinéraire</h3>
+                  <RouteMap 
+                    order={order}
+                  />
                 </div>
               )}
             </motion.div>

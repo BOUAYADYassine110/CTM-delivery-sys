@@ -12,6 +12,36 @@ def track_order(tracking_number):
         if not order:
             return jsonify({'success': False, 'error': 'Order not found'}), 404
         
+        # Calculate route if missing and coordinates are available
+        if (not order.get('route_distance_km') and 
+            order.get('delivery_type') == 'in_city' and
+            order.get('sender', {}).get('coordinates') and 
+            order.get('recipient', {}).get('coordinates')):
+            
+            from utils.external_services import route_service
+            print(f"📍 Calculating missing route for order {tracking_number}...")
+            
+            route_result = route_service.get_route(
+                order['sender']['coordinates'],
+                order['recipient']['coordinates']
+            )
+            
+            if route_result.get('success'):
+                order['route_distance_km'] = route_result.get('distance_km', 0)
+                order['route_duration_minutes'] = route_result.get('duration_minutes', 0)
+                order['route_geometry'] = route_result.get('geometry', [])
+                
+                # Update in database
+                db.orders.update_one(
+                    {'tracking_number': tracking_number},
+                    {'$set': {
+                        'route_distance_km': order['route_distance_km'],
+                        'route_duration_minutes': order['route_duration_minutes'],
+                        'route_geometry': order['route_geometry']
+                    }}
+                )
+                print(f"✅ Route calculated and saved: {order['route_distance_km']}km, {order['route_duration_minutes']}min")
+        
         # Get assigned agent details if available
         agent = None
         if order.get('assigned_agent'):
