@@ -4,19 +4,23 @@ import { AlertCircle, TrendingUp, Clock, DollarSign } from 'lucide-react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// Custom icons with actual representations
+// Custom icons
 const senderIcon = new L.Icon({
-  iconUrl: 'https://cdn-icons-png.flaticon.com/512/3774/3774299.png',
-  iconSize: [35, 35],
-  iconAnchor: [17, 35],
-  popupAnchor: [0, -35]
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
 });
 
 const recipientIcon = new L.Icon({
-  iconUrl: 'https://cdn-icons-png.flaticon.com/512/3774/3774278.png',
-  iconSize: [35, 35],
-  iconAnchor: [17, 35],
-  popupAnchor: [0, -35]
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
 });
 
 export default function InCityRoutePreview({ senderCoords, recipientCoords, city }) {
