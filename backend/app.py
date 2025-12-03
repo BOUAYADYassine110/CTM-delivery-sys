@@ -11,6 +11,7 @@ from routes.admin import admin_bp
 from routes.drivers import drivers_bp
 from routes.intercity import intercity_bp
 from routes.incity import incity_bp
+from routes.driver_tracking import driver_tracking_bp
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = Config.SECRET_KEY
@@ -36,6 +37,7 @@ app.register_blueprint(tracking_bp, url_prefix='/api')
 app.register_blueprint(drivers_bp, url_prefix='/api')
 app.register_blueprint(intercity_bp, url_prefix='/api')
 app.register_blueprint(incity_bp, url_prefix='/api')
+app.register_blueprint(driver_tracking_bp, url_prefix='/api')
 
 @app.route('/')
 def index():

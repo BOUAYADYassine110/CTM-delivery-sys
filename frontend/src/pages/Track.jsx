@@ -113,7 +113,15 @@ export default function Track() {
               
               {order.sender && order.recipient && (
                 <div className="mt-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Carte de l'itinéraire</h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-900">Carte de l'itinéraire</h3>
+                    {order.status !== 'delivered' && order.status !== 'cancelled' && (
+                      <div className="flex items-center text-sm">
+                        <div className="h-2 w-2 bg-blue-500 rounded-full mr-2 animate-pulse" />
+                        <span className="text-blue-600">Suivi en temps réel actif</span>
+                      </div>
+                    )}
+                  </div>
                   <RouteMap 
                     order={order}
                   />

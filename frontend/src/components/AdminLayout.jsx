@@ -5,7 +5,8 @@ import {
   Package, 
   Users, 
   Truck, 
-  Map, 
+  Map,
+  Radio, 
   LogOut,
   Menu,
   X
@@ -21,6 +22,7 @@ export default function AdminLayout({ children }) {
   const menuItems = [
     { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { path: '/orders', icon: Package, label: 'Commandes' },
+    { path: '/admin/live-tracking', icon: Radio, label: 'Suivi en Direct' },
     { path: '/drivers', icon: Truck, label: 'Chauffeurs' },
     { path: '/admin/users', icon: Users, label: 'Utilisateurs' },
     { path: '/route-test', icon: Map, label: 'Test Route' },

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import apiClient from '../api/client';
+import { useDriverTracking } from '../hooks/useDriverTracking';
 import 'leaflet/dist/leaflet.css';
 
 // Fix Leaflet default marker icons
@@ -64,6 +65,7 @@ export default function RouteMap({ order }) {
   const [routeData, setRouteData] = useState(null);
   const [driverPosition, setDriverPosition] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { driverLocation, connected } = useDriverTracking(order?.tracking_number);
   
   const senderCoords = order?.sender?.coordinates;
   const recipientCoords = order?.recipient?.coordinates;
@@ -143,8 +145,18 @@ export default function RouteMap({ order }) {
     fetchRoute();
   }, [senderCoords, recipientCoords, isInCity, order]);
   
+  // Update driver position from real-time tracking
+  useEffect(() => {
+    if (driverLocation?.location) {
+      setDriverPosition(driverLocation.location);
+    }
+  }, [driverLocation]);
+  
   const animateDriver = (routeGeometry) => {
     if (!routeGeometry || routeGeometry.length < 2) return;
+    
+    // Only animate if no real-time tracking
+    if (connected) return;
     
     let index = 0;
     const interval = setInterval(() => {
@@ -154,7 +166,7 @@ export default function RouteMap({ order }) {
       }
       setDriverPosition(routeGeometry[index]);
       index++;
-    }, 2000); // Move every 2 seconds
+    }, 2000);
     
     return () => clearInterval(interval);
   };

@@ -12,6 +12,7 @@ import AdminPanel from './pages/AdminPanel';
 import MyOrders from './pages/MyOrders';
 import DriversManagement from './pages/DriversManagement';
 import RouteTest from './pages/RouteTest';
+import AdminLiveTracking from './pages/AdminLiveTracking';
 import AdminLayout from './components/AdminLayout';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
             <Route path="/dashboard" element={<AdminLayout><Dashboard /></AdminLayout>} />
             <Route path="/orders" element={<AdminLayout><Dashboard /></AdminLayout>} />
             <Route path="/admin/users" element={<AdminLayout><AdminPanel /></AdminLayout>} />
+            <Route path="/admin/live-tracking" element={<AdminLayout><AdminLiveTracking /></AdminLayout>} />
             <Route path="/drivers" element={<AdminLayout><DriversManagement /></AdminLayout>} />
             <Route path="/route-test" element={<AdminLayout><RouteTest /></AdminLayout>} />
           </Routes>
